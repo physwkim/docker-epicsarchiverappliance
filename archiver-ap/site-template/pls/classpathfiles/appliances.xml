@@ -1,0 +1,11 @@
+<appliances>
+    <appliance>
+        <identity>@ARCHIVER_AP_NAME@</identity>
+        <cluster_inetport>@ARCHIVER_AP_HOSTNAME@:16670</cluster_inetport>
+        <mgmt_url>http://@ARCHIVER_AP_HOSTNAME@:17665/mgmt/bpl</mgmt_url>
+        <engine_url>http://@ARCHIVER_AP_HOSTNAME@:17666/engine/bpl</engine_url>
+        <etl_url>http://@ARCHIVER_AP_HOSTNAME@:17667/etl/bpl</etl_url>
+        <retrieval_url>http://@ARCHIVER_AP_HOSTNAME@:17668/retrieval/bpl</retrieval_url>
+        <data_retrieval_url>http://@ARCHIVER_AP_HOSTNAME@:17668/retrieval</data_retrieval_url>
+    </appliance>
+</appliances>

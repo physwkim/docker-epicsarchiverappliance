@@ -1,0 +1,2 @@
+include $(TOP)/configure/RULES_BUILD
+include $(TOP)/configure/RULES_START

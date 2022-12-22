@@ -1,0 +1,65 @@
+version: '3'
+
+services:
+  archiver-ap:
+    build: ./archiver-ap
+
+    deploy:
+      resources:
+        limits:
+          memory: @ARCHIVER_AP_MEMORY_LIMIT@
+
+    hostname: @ARCHIVER_AP_HOSTNAME@
+    container_name: @ARCHIVER_AP_HOSTNAME@
+    stdin_open: true
+    tty: true
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/hosts:/etc/hosts:ro
+      - ./storage/logs/mgmt:/opt/epicsarchiverap/mgmt/logs
+      - ./storage/logs/engine:/opt/epicsarchiverap/engine/logs
+      - ./storage/logs/etl:/opt/epicsarchiverap/etl/logs
+      - ./storage/logs/retrieval:/opt/epicsarchiverap/retrieval/logs
+      - ./storage/logs:/opt/epicsarchiverap/logs
+      - ./storage:/storage
+
+    environment:
+      - ARCHAPPL_ALL_APPS_ON_ONE_JVM="true"
+
+    networks:
+      docker1:
+        ipv4_address: @ARCHIVER_AP_IP@
+
+    depends_on:
+      - archiver-db
+ 
+  archiver-db:
+    build: ./archiver-db
+
+    deploy:
+      resources:
+        limits:
+          memory: @ARCHIVER_DB_MEMORY_LIMIT@
+
+    hostname: @ARCHIVER_DB_HOSTNAME@
+    container_name: @ARCHIVER_DB_HOSTNAME@
+
+    environment:
+      - MARIADB_ROOT_PASSWORD=@MARIADB_ROOT_PASSWORD@
+      - MARIADB_USER=@MARIADB_USER@
+      - MARIADB_PASSWORD=@MARIADB_PASSWORD@
+      - MARIADB_DATABASE=@MARIADB_DATABASE@
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/hosts:/etc/hosts:ro
+      - ./storage/db:/var/lib/mysql
+
+    networks:
+      docker1:
+        ipv4_address: @ARCHIVER_DB_IP@
+
+networks:
+  @DOCKER_NETWORK@:
+    external: true

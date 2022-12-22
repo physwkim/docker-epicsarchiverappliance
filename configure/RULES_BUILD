@@ -1,0 +1,58 @@
+.DEFAULT_GOAL := build
+
+build: clean build.storage build.compose build.xml build.dockerfile build.docker
+
+build.storage:
+	@mkdir -p storage/db
+	@mkdir -p storage/sts
+	@mkdir -p storage/mts
+	@mkdir -p storage/lts
+	@mkdir -p storage/logs/mgmt
+	@mkdir -p storage/logs/engine
+	@mkdir -p storage/logs/etl
+	@mkdir -p storage/logs/retrieval
+
+build.compose:
+	@sed -i -e "s:@ARCHIVER_AP_HOSTNAME@:$(ARCHIVER_AP_HOSTNAME):g" \
+			-e "s:@ARCHIVER_AP_IP@:$(ARCHIVER_AP_IP):g" \
+			-e "s:@ARCHIVER_AP_MEMORY_LIMIT@:$(ARCHIVER_AP_MEMORY_LIMIT):g" \
+			-e "s:@ARCHIVER_DB_HOSTNAME@:$(ARCHIVER_DB_HOSTNAME):g" \
+			-e "s:@ARCHIVER_DB_IP@:$(ARCHIVER_DB_IP):g" \
+			-e "s:@ARCHIVER_DB_MEMORY_LIMIT@:$(ARCHIVER_DB_MEMORY_LIMIT):g" \
+			-e "s:@MARIADB_ROOT_PASSWORD@:$(MARIADB_ROOT_PASSWORD):g" \
+			-e "s:@MARIADB_USER@:$(MARIADB_USER):g" \
+			-e "s:@MARIADB_PASSWORD@:$(MARIADB_PASSWORD):g" \
+			-e "s:@MARIADB_DATABASE@:$(MARIADB_DATABASE):g" \
+			-e "s:@DOCKER_NETWORK@:$(DOCKER_NETWORK):g" \
+			$(TOP)/docker-compose.yml
+
+build.dockerfile:
+	@sed -i -e "s:@SITE_ID@:$(SITE_ID):g" \
+			-e "s:@ARCHIVER_AP_VERSION@:$(ARCHIVER_AP_VERSION):g" \
+			-e "s:@TIMEZONE@:$(TIMEZONE):g" \
+			-e "s:@MARIADB_JDBC_VER@:$(MARIADB_JDBC_VER):g" \
+			-e "s:@EPICS_CA_ADDR_LIST@:$(EPICS_CA_ADDR_LIST):g" \
+			-e "s:@EPICS_CA_AUTO_ADDR_LIST@:$(EPICS_CA_AUTO_ADDR_LIST):g" \
+			-e "s:@EPICS_CA_MAX_ARRAY_BYTES@:$(EPICS_CA_MAX_ARRAY_BYTES):g" \
+			-e "s:@JAVA_MEMORY_LIMIT@:$(JAVA_MEMORY_LIMIT):g" \
+			$(TOP)/archiver-ap/Dockerfile
+
+build.xml:
+	@sed -i -e "s:@ARCHIVER_AP_HOSTNAME@:$(ARCHIVER_AP_HOSTNAME):g" \
+			-e "s:@ARCHIVER_AP_NAME@:$(ARCHIVER_AP_NAME):g" \
+		$(TOP)/archiver-ap/site-template/$(SITE_ID)/classpathfiles/appliances.xml
+
+	@sed -i -e "s:@ARCHIVER_DB_HOSTNAME@:$(ARCHIVER_DB_HOSTNAME):g" \
+		-e "s:@MARIADB_USER@:$(MARIADB_USER):g" \
+		-e "s:@MARIADB_PASSWORD@:$(MARIADB_PASSWORD):g" \
+		-e "s:@MARIADB_DATABASE@:$(MARIADB_DATABASE):g" \
+		$(TOP)/archiver-ap/site-template/$(SITE_ID)/classpathfiles/context.xml
+
+build.docker:
+	@docker-compose build --no-cache
+
+clean:
+	@git checkout -- $(TOP)/docker-compose.yml
+	@git checkout -- $(TOP)/archiver-ap/Dockerfile
+	@git checkout -- $(TOP)/archiver-ap/site-template/$(SITE_ID)/classpathfiles/appliances.xml
+	@git checkout -- $(TOP)/archiver-ap/site-template/$(SITE_ID)/classpathfiles/context.xml
