@@ -14,6 +14,15 @@ docker network create \
 --gateway=10.2.0.1 \
 docker1
 ```
+* [Manage docker as a non-root
+  user](https://docs.docker.com/engine/install/linux-postinstall/)
+```bash
+# Create the docker group
+sudo groupadd docker
+# Add your user to the docker group
+sudo usermod -aG docker $USER
+# Logout and login
+```
 
 ### Build
 * Make site specific settings
