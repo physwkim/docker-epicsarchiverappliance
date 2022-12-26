@@ -49,7 +49,7 @@ build.xml:
 		$(TOP)/archiver-ap/site-template/$(SITE_ID)/classpathfiles/context.xml
 
 build.docker:
-	@docker-compose build --no-cache
+	@docker compose build --no-cache
 
 clean:
 	@git checkout -- $(TOP)/docker-compose.yml
