@@ -7,6 +7,21 @@
 * [Install latest Docker](https://docs.docker.com/engine/install/ubuntu/)
     * Tested on docker(20.10.22) and docker-compose(v2.14.1)
 
+* Docker daemon settings
+```json
+{
+    "iptables" : false,
+    "bip" : "10.1.1.1/24",
+    "fixed-cidr" : "10.1.1.0/25",
+    "default-address-pool": [
+        {
+            "base":"10.2.0.0/16",
+            "size":24
+        }
+    ]
+}
+```
+
 * Docker network create
 ```bash
 docker network create \
