@@ -5,7 +5,7 @@
 
 ### Pre-requisites
 * [Install latest Docker](https://docs.docker.com/engine/install/ubuntu/)
-Tested on docker(20.10.22) and docker-compose(v2.14.1)
+- Tested on docker(20.10.22) and docker-compose(v2.14.1)
 
 * Docker network create
 ```bash
