@@ -35,6 +35,9 @@ cp -r ./archiver-ap/site-template/pls ./archiver-ap/site-template/$SITE_ID
     - [routers will often not forward broadcast requests, which suggests using
       specific IP
       addresses.](https://epics-controls.org/resources-and-support/documents/howto-documents/configure-channel-access/)
+    - Consider [using
+      iptables](https://epics-controls.org/resources-and-support/documents/howto-documents/channel-access-reach-multiple-soft-iocs-linux/)
+      if there are multiple IOCs.
 * Build docker images
 ```bash
 make
