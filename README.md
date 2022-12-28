@@ -86,6 +86,32 @@ make start
 firefox http://archiver-ap:17665/mgmt/ui/index.html
 ```
 
+### Systemd
+
+```bash
+mkdir /etc/docker-compose
+ln -s /opt/docker-epicsarchiverappliance /etc/docker-compose/archiverap
+
+cat /etc/systemd/system/docker-compose@.service
+
+[Unit]
+Description=%i service with docker compose
+PartOf=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+WorkingDirectory=/etc/docker-compose/%i
+ExecStart=/usr/bin/docker compose up -d --remove-orphans
+ExecStop=/usr/bin/docker compose down
+
+[Install]
+WantedBy=multi-user.target
+
+systemctl start docker-compose@archiverap
+```
+
 ## Reference
 * [epicsarchiverap-env](https://github.com/jeonghanlee/epicsarchiverap-env)
 * [docker-archiver-appliance](https://eicweb.phy.anl.gov/controls/epics/archiver/docker-archiver-appliance)
