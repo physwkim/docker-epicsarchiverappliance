@@ -30,6 +30,17 @@ docker network create \
 --gateway=10.2.0.1 \
 docker1
 ```
+
+* Iptables for container network
+```bash
+*nat
+:POSTROUTING ACCEPT [0:0]
+-A POSTROUTING -o $IFACE -j MASQUERADE
+-A POSTROUTING -o docker0 -j MASQUERADE
+-A POSTROUTING -o docker1 -j MASQUERADE
+COMMIT
+```
+
 * [Manage docker as a non-root
   user](https://docs.docker.com/engine/install/linux-postinstall/)
 ```bash
@@ -38,6 +49,13 @@ sudo groupadd docker
 # Add your user to the docker group
 sudo usermod -aG docker $USER
 # Logout and login
+```
+
+* Edit /etc/hosts
+```bash
+10.2.0.9 archiver-ap
+10.2.0.10 archiver-db
+IOC_IP sr-ioc
 ```
 
 ### Build
@@ -56,12 +74,6 @@ cp -r ./archiver-ap/site-template/pls ./archiver-ap/site-template/$SITE_ID
 * Build docker images
 ```bash
 make
-```
-* Edit /etc/hosts
-```bash
-10.2.0.9 archiver-ap
-10.2.0.10 archiver-db
-IOC_IP sr-ioc
 ```
 
 ### Run
