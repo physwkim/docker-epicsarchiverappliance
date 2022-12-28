@@ -24,6 +24,9 @@ build.compose:
 			-e "s:@MARIADB_PASSWORD@:$(MARIADB_PASSWORD):g" \
 			-e "s:@MARIADB_DATABASE@:$(MARIADB_DATABASE):g" \
 			-e "s:@DOCKER_NETWORK@:$(DOCKER_NETWORK):g" \
+			-e "s:@EPICS_CA_ADDR_LIST@:$(EPICS_CA_ADDR_LIST):g" \
+			-e "s:@EPICS_CA_AUTO_ADDR_LIST@:$(EPICS_CA_AUTO_ADDR_LIST):g" \
+			-e "s:@EPICS_CA_MAX_ARRAY_BYTES@:$(EPICS_CA_MAX_ARRAY_BYTES):g" \
 			$(TOP)/docker-compose.yml
 
 build.dockerfile:
@@ -31,9 +34,6 @@ build.dockerfile:
 			-e "s:@ARCHIVER_AP_VERSION@:$(ARCHIVER_AP_VERSION):g" \
 			-e "s:@TIMEZONE@:$(TIMEZONE):g" \
 			-e "s:@MARIADB_JDBC_VER@:$(MARIADB_JDBC_VER):g" \
-			-e "s:@EPICS_CA_ADDR_LIST@:$(EPICS_CA_ADDR_LIST):g" \
-			-e "s:@EPICS_CA_AUTO_ADDR_LIST@:$(EPICS_CA_AUTO_ADDR_LIST):g" \
-			-e "s:@EPICS_CA_MAX_ARRAY_BYTES@:$(EPICS_CA_MAX_ARRAY_BYTES):g" \
 			-e "s:@JAVA_MEMORY_LIMIT@:$(JAVA_MEMORY_LIMIT):g" \
 			$(TOP)/archiver-ap/Dockerfile
 

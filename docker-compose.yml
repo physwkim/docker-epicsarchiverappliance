@@ -26,6 +26,9 @@ services:
 
     environment:
       - ARCHAPPL_ALL_APPS_ON_ONE_JVM="true"
+      - EPICS_CA_ADDR_LIST=@EPICS_CA_ADDR_LIST@
+      - EPICS_CA_AUTO_ADDR_LIST=@EPICS_CA_AUTO_ADDR_LIST@
+      - EPICS_CA_MAX_ARRAY_BYTES=@EPICS_CA_MAX_ARRAY_BYTES@
 
     networks:
       docker1:
