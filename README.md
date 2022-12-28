@@ -31,7 +31,10 @@ sudo usermod -aG docker $USER
 cp -r ./archiver-ap/site-template/pls ./archiver-ap/site-template/$SITE_ID
 ```
 * Edit [CONFIG_ENV](configure/CONFIG_ENV)
-use single quote for EPICS_CA_ADDR_LIST='192.168.0.1 192.168.0.2 192.168.0.3'
+    - use single quote for EPICS_CA_ADDR_LIST. ex) '192.168.0.1 192.168.0.2 192.168.0.3'
+    - [routers will often not forward broadcast requests, which suggests using
+      specific IP
+      addresses.](https://epics-controls.org/resources-and-support/documents/howto-documents/configure-channel-access/)
 * Build docker images
 ```bash
 make
