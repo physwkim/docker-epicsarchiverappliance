@@ -24,7 +24,7 @@ build.compose:
 			-e "s:@MARIADB_PASSWORD@:$(MARIADB_PASSWORD):g" \
 			-e "s:@MARIADB_DATABASE@:$(MARIADB_DATABASE):g" \
 			-e "s:@DOCKER_NETWORK@:$(DOCKER_NETWORK):g" \
-			-e "s:@EPICS_CA_ADDR_LIST@:$(EPICS_CA_ADDR_LIST):g" \
+			-e 's:@EPICS_CA_ADDR_LIST@:$(EPICS_CA_ADDR_LIST):g' \
 			-e "s:@EPICS_CA_AUTO_ADDR_LIST@:$(EPICS_CA_AUTO_ADDR_LIST):g" \
 			-e "s:@EPICS_CA_MAX_ARRAY_BYTES@:$(EPICS_CA_MAX_ARRAY_BYTES):g" \
 			$(TOP)/docker-compose.yml
