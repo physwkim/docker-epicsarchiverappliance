@@ -7,6 +7,21 @@
 * [Install latest Docker](https://docs.docker.com/engine/install/ubuntu/)
     * Tested on docker(20.10.22) and docker-compose(v2.14.1)
 
+* Docker daemon settings
+```json
+{
+    "iptables" : false,
+    "bip" : "10.1.1.1/24",
+    "fixed-cidr" : "10.1.1.0/25",
+    "default-address-pool": [
+        {
+            "base":"10.2.0.0/16",
+            "size":24
+        }
+    ]
+}
+```
+
 * Docker network create
 ```bash
 docker network create \
@@ -15,6 +30,17 @@ docker network create \
 --gateway=10.2.0.1 \
 docker1
 ```
+
+* Iptables for container network
+```bash
+*nat
+:POSTROUTING ACCEPT [0:0]
+-A POSTROUTING -o $IFACE -j MASQUERADE
+-A POSTROUTING -o docker0 -j MASQUERADE
+-A POSTROUTING -o docker1 -j MASQUERADE
+COMMIT
+```
+
 * [Manage docker as a non-root
   user](https://docs.docker.com/engine/install/linux-postinstall/)
 ```bash
@@ -23,6 +49,13 @@ sudo groupadd docker
 # Add your user to the docker group
 sudo usermod -aG docker $USER
 # Logout and login
+```
+
+* Edit /etc/hosts
+```bash
+10.2.0.9 archiver-ap
+10.2.0.10 archiver-db
+IOC_IP sr-ioc
 ```
 
 ### Build
@@ -42,12 +75,6 @@ cp -r ./archiver-ap/site-template/pls ./archiver-ap/site-template/$SITE_ID
 ```bash
 make
 ```
-* Edit /etc/hosts
-```bash
-10.2.0.9 archiver-ap
-10.2.0.10 archiver-db
-IOC_IP sr-ioc
-```
 
 ### Run
 ```bash
@@ -57,6 +84,32 @@ make start
 ### Web
 ```bash
 firefox http://archiver-ap:17665/mgmt/ui/index.html
+```
+
+### Systemd
+
+```bash
+mkdir /etc/docker-compose
+ln -s /opt/docker-epicsarchiverappliance /etc/docker-compose/archiverap
+
+cat /etc/systemd/system/docker-compose@.service
+
+[Unit]
+Description=%i service with docker compose
+PartOf=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+WorkingDirectory=/etc/docker-compose/%i
+ExecStart=/usr/bin/docker compose up -d --remove-orphans
+ExecStop=/usr/bin/docker compose down
+
+[Install]
+WantedBy=multi-user.target
+
+systemctl start docker-compose@archiverap
 ```
 
 ## Reference
