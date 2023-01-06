@@ -21,10 +21,6 @@ ENV ARCHAPPL_MEDIUM_TERM_FOLDER=/storage/mts
 ENV ARCHAPPL_LONG_TERM_FOLDER=/storage/lts
 ENV ARCHAPPL_ALL_APPS_ON_ONE_JVM="true"
 
-RUN export EPICS_CA_ADDR_LIST=@EPICS_CA_ADDR_LIST@
-RUN export EPICS_CA_AUTO_ADDR_LIST=@EPICS_CA_AUTO_ADDR_LIST@
-RUN export EPICS_CA_MAX_ARRAY_BYTES=@EPICS_CA_MAX_ARRAY_BYTES@
-
 RUN apt-get update \
     && apt-get install -y apt-utils wget git ant openjdk-17-jdk tomcat9 tomcat9-common tomcat9-admin tomcat9-user libtomcat9-java jsvc unzip vim iputils-ping iproute2 mariadb-client
 
@@ -75,6 +71,9 @@ RUN mkdir -p /opt/epicsarchiverap/mgmt/conf \
 
 # Start services
 ENTRYPOINT sleep 30 \
+    && export EPICS_CA_ADDR_LIST=@EPICS_CA_ADDR_LIST@ \
+    && export EPICS_CA_AUTO_ADDR_LIST=@EPICS_CA_AUTO_ADDR_LIST@ \
+    && export EPICS_CA_MAX_ARRAY_BYTES=@EPICS_CA_MAX_ARRAY_BYTES@ \
     && export CATALINA_BASE=/opt/epicsarchiverap/mgmt \
     && bash "$TOMCAT_HOME/bin/startup.sh" \
     && export CATALINA_BASE=/opt/epicsarchiverap/engine \
