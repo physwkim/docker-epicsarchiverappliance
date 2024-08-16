@@ -28,7 +28,7 @@ RUN apt-get update \
     && apt-get install -y apt-utils wget git ant openjdk-17-jdk tomcat9 tomcat9-common tomcat9-admin tomcat9-user libtomcat9-java jsvc unzip vim iputils-ping iproute2 mariadb-client
 
 # Download Archiver appliance and submodules
-RUN git clone -b $ARCHIVER_APPLIANCE_VERSION https://github.com/slacmshankar/epicsarchiverap.git \
+RUN git clone -b $ARCHIVER_APPLIANCE_VERSION https://github.com/archiver-appliance/epicsarchiverap.git \
     && cd epicsarchiverap \
     && git submodule update --init --recursive
 
